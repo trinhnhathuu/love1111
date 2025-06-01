@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chữ rơi 3D có độ sâu</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0a0a0a, #1a1a2e, #16213e);
+            height: 100vh;
+            overflow: hidden;
+            font-family: 'Arial', sans-serif;
+            perspective: 1200px;
+            perspective-origin: center center;
+        }
+
+        .scene {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 0.1s ease-out;
+        }
+
+        .text-item {
+            position: absolute;
+            color: white;
+            font-weight: bold;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+            white-space: nowrap;
+            user-select: none;
+            border-radius: 15px;
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            transform-style: preserve-3d;
+            transition: all 0.3s ease;
+            min-width: 44px;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: translateX(-50%) translateY(-200px) translateZ(var(--depth));
+        }
+
+        .text-item:hover {
+            transform: scale(1.1) rotateZ(3deg) translateX(-50%);
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.4);
+        }
+
+        .text-item.love {
+            color: #ff6b9d;
+            text-shadow: 0 0 20px rgba(255, 107, 157, 0.9);
+            background: rgba(255, 107, 157, 0.15);
+            border: 1px solid rgba(255, 107, 157, 0.3);
+            box-shadow: 0 0 20px rgba(255, 107, 157, 0.3);
+        }
+
+        .text-item.date {
+            color: #74b9ff;
+            text-shadow: 0 0 20px rgba(116, 185, 255, 0.9);
+            background: rgba(116, 185, 255, 0.15);
+            border: 1px solid rgba(116, 185, 255, 0.3);
+            box-shadow: 0 0 20px rgba(116, 185, 255, 0.3);
+        }
+
+        .text-item.special {
+            color: #fd79a8;
+            text-shadow: 0 0 20px rgba(253, 121, 168, 0.9);
+            background: rgba(253, 121, 168, 0.15);
+            border: 1px solid rgba(253, 121, 168, 0.3);
+            box-shadow: 0 0 20px rgba(253, 121, 168, 0.3);
+        }
+
+        @keyframes fall3D {
+            0% {
+                transform: translateX(-50%) translateY(-200px) translateZ(var(--depth)) rotateX(0deg) rotateZ(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(-50%) translateY(calc(100vh + 100px)) translateZ(var(--depth)) rotateX(10deg) rotateZ(var(--rotation));
+                opacity: 0;
+            }
+        }
+
+        @keyframes heartFall3D {
+            0% {
+                transform: translateX(-50%) translateY(-200px) translateZ(var(--depth)) scale(1) rotateZ(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(-50%) translateY(calc(100vh + 100px)) translateZ(var(--depth)) scale(0.8) rotateZ(180deg);
+                opacity: 0;
+            }
+        }
+
+        .depth-near {
+            --depth: 200px;
+            --rotation: 15deg;
+            font-size: 20px;
+            z-index: 100;
+        }
+
+        .depth-mid {
+            --depth: 0px;
+            --rotation: 8deg;
+            font-size: 16px;
+            z-index: 50;
+        }
+
+        .heart-particle {
+            position: absolute;
+            color: #ff6b9d;
+            font-size: 16px;
+            opacity: 0;
+            pointer-events: none;
+            transform-style: preserve-3d;
+            animation: heartFloat3D 3s ease-out forwards;
+        }
+
+        @keyframes heartFloat3D {
+            0% {
+                transform: translateY(0) translateZ(0) scale(0) rotateZ(0deg);
+                opacity: 0;
+            }
+            20% {
+                opacity: 1;
+                transform: scale(1) rotateZ(45deg);
+            }
+            100% {
+                transform: translateY(-200px) translateZ(100px) scale(0.3) rotateZ(180deg);
+                opacity: 0;
+            }
+        }
+
+        .sparkle-3d {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: white;
+            border-radius: 50%;
+            transform-style: preserve-3d;
+            animation: sparkle3D 3s infinite;
+        }
+
+        @keyframes sparkle3D {
+            0%, 100% { 
+                opacity: 0; 
+                transform: translateZ(0px) scale(0) rotateX(0deg); 
+            }
+            50% { 
+                opacity: 1; 
+                transform: translateZ(var(--sparkle-depth, 0px)) scale(1) rotateX(180deg); 
+            }
+        }
+
+        .glow-orb-3d {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            transform-style: preserve-3d;
+            animation: float3D 12s infinite ease-in-out;
+        }
+
+        @keyframes float3D {
+            0%, 100% { 
+                transform: translateX(0) translateY(0) translateZ(0px) rotateY(0deg); 
+            }
+            25% { 
+                transform: translateX(150px) translateY(-100px) translateZ(100px) rotateY(90deg); 
+            }
+            50% { 
+                transform: translateX(-100px) translateY(150px) translateZ(-100px) rotateY(180deg); 
+            }
+            75% { 
+                transform: translateX(100px) translateY(100px) translateZ(50px) rotateY(270deg); 
+            }
+        }
+
+        .grid-3d {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            transform: rotateX(90deg) translateZ(-300px);
+            opacity: 0.3;
+        }
+
+        @media screen and (max-width: 1024px) {
+            body {
+                perspective: 1000px;
+            }
+            .scene {
+                transition: transform 0.2s ease-out;
+            }
+            .text-item {
+                padding: 7px 14px;
+                font-size: 15px;
+            }
+            .depth-near {
+                font-size: 18px;
+            }
+            .depth-mid {
+                font-size: 15px;
+            }
+            .glow-orb-3d {
+                width: 100px;
+                height: 100px;
+            }
+        }
+
+        @media screen and (max-width: 768px) {
+            body {
+                perspective: 800px;
+                backdrop-filter: none;
+            }
+            .text-item {
+                padding: 6px 12px;
+                font-size: 14px;
+                border-radius: 12px;
+                backdrop-filter: none;
+                background: rgba(255, 255, 255, 0.2);
+                transform: translateX(-50%) translateY(-200px) translateZ(var(--depth));
+            }
+            .depth-near {
+                --depth: 100px;
+                font-size: 16px;
+            }
+            .depth-mid {
+                --depth: 0px;
+                font-size: 14px;
+            }
+            .glow-orb-3d {
+                width: 80px;
+                height: 80px;
+            }
+            .instruction {
+                font-size: 12px;
+                padding: 8px;
+                top: 15px;
+                left: 15px;
+                right: 15px;
+                width: auto;
+                text-align: center;
+            }
+        }
+
+        @media screen and (max-width: 640px) {
+            body {
+                perspective: 600px;
+            }
+            .text-item {
+                padding: 5px 10px;
+                font-size: 13px;
+                border-radius: 10px;
+            }
+            .depth-near {
+                font-size: 15px;
+            }
+            .depth-mid {
+                font-size: 13px;
+            }
+            .glow-orb-3d {
+                width: 60px;
+                height: 60px;
+            }
+            .heart-particle {
+                font-size: 14px;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            body {
+                perspective: 500px;
+            }
+            .text-item {
+                padding: 4px 8px;
+                font-size: 12px;
+                border-radius: 8px;
+            }
+            .depth-near {
+                font-size: 14px;
+            }
+            .depth-mid {
+                font-size: 12px;
+            }
+            .glow-orb-3d {
+                width: 50px;
+                height: 50px;
+            }
+            .heart-particle {
+                font-size: 12px;
+            }
+            .sparkle-3d {
+                width: 2px;
+                height: 2px;
+            }
+            .instruction {
+                font-size: 11px;
+                padding: 6px;
+                top: 10px;
+                left: 10px;
+                right: 10px;
+            }
+        }
+
+        @media screen and (max-width: 360px) {
+            body {
+                perspective: 400px;
+            }
+            .text-item {
+                padding: 3px 6px;
+                font-size: 11px;
+                border-radius: 6px;
+            }
+            .depth-near {
+                font-size: 13px;
+            }
+            .depth-mid {
+                font-size: 11px;
+            }
+            .glow-orb-3d {
+                width: 40px;
+                height: 40px;
+            }
+            .heart-particle {
+                font-size: 10px;
+            }
+            .instruction {
+                font-size: 10px;
+                padding: 5px;
+                top: 5px;
+                left: 5px;
+                right: 5px;
+            }
+        }
+
+        @media screen and (orientation: landscape) and (max-height: 500px) {
+            .instruction {
+                display: none;
+            }
+            .text-item {
+                padding: 3px 6px;
+                font-size: 10px;
+            }
+        }
+
+        @media screen and (-webkit-min-device-pixel-ratio: 2), 
+               screen and (min-resolution: 192dpi) {
+            .text-item {
+                text-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
+            }
+            .sparkle-3d {
+                box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+            }
+        }
+
+        .instruction {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+    </style>
+</head>
+<body>
+    <div class="instruction">Chạm và kéo để xoay khung cảnh hoặc kéo chữ riêng lẻ</div>
+    <div class="scene" id="scene">
+        <div class="grid-3d"></div>
+        <div class="glow-orb-3d" style="left: 10%; top: 20%;"></div>
+        <div class="glow-orb-3d" style="right: 15%; top: 60%; animation-delay: 4s;"></div>
+        <div class="glow-orb-3d" style="left: 60%; bottom: 30%; animation-delay: 8s;"></div>
+    </div>
+
+    <script>
+        const scene = document.getElementById('scene');
+        const texts = [
+            { text: 'hữu nè', type: 'special' },
+            { text: 'hữu nè ❤️', type: 'love' },
+            { text: 'hữu nè ✨', type: 'date' }
+        ];
+
+        const MAX_TEXT_ON_SCREEN =100;
+        let currentTextCount = 0;
+        const occupiedPositions = [];
+        const depthLevels = ['depth-near', 'depth-mid'];
+        let textIndex = 0;
+        let isDragging = false;
+        let previousMousePosition = { x: 0, y: 0 };
+        let rotation = { x: 0, y: 0 };
+
+        function createFalling3DText() {
+            if (currentTextCount >= MAX_TEXT_ON_SCREEN) return;
+            const textData = texts[textIndex % texts.length];
+            const element = document.createElement('div');
+            const depthClass = depthLevels[Math.floor(Math.random() * depthLevels.length)];
+            element.className = `text-item ${textData.type} ${depthClass}`;
+            element.textContent = textData.text;
+            element.setAttribute('role', 'button');
+            element.setAttribute('aria-label', `Draggable text: ${textData.text}`);
+            element.setAttribute('tabindex', '0');
+
+            element.style.visibility = 'hidden';
+            scene.appendChild(element);
+            const elementWidth = element.offsetWidth;
+            element.style.visibility = 'visible';
+
+            let leftPos;
+            let attempts = 0;
+            do {
+                leftPos = Math.random() * (window.innerWidth - elementWidth) + elementWidth / 2;
+                leftPos = Math.max(window.innerWidth * 0.1, Math.min(leftPos, window.innerWidth * 0.9));
+                attempts++;
+            } while (occupiedPositions.some(pos => Math.abs(pos - leftPos) < 100) && attempts < 10);
+
+            occupiedPositions.push(leftPos);
+            element.style.left = leftPos + 'px';
+            element.style.top = '-100px';
+
+            let duration = 5;
+            if (depthClass === 'depth-near') duration = 4;
+            else if (depthClass === 'depth-mid') duration = 5;
+
+            element.style.animation = `fall3D ${duration}s linear forwards`;
+            currentTextCount++;
+            addDragFunctionality(element);
+
+            setTimeout(() => {
+                if (element.parentNode) {
+                    element.remove();
+                    currentTextCount--;
+                    occupiedPositions.splice(occupiedPositions.indexOf(leftPos), 1);
+                }
+            }, duration * 1000);
+
+            textIndex++;
+        }
+
+        function addDragFunctionality(element) {
+            let elementDragging = false;
+            let elementOffset = { x: 0, y: 0 };
+
+            function handleDragStart(e) {
+                e.stopPropagation();
+                elementDragging = true;
+                element.style.animation = 'none';
+                element.style.cursor = 'grabbing';
+                element.style.zIndex = 1000;
+                const rect = element.getBoundingClientRect();
+                elementOffset.x = e.clientX - rect.left;
+                elementOffset.y = e.clientY - rect.top;
+                createHeart3DParticle(e.clientX, e.clientY);
+            }
+
+            element.addEventListener('mousedown', handleDragStart);
+            element.addEventListener('touchstart', (e) => {
+                if (e.touches.length === 1) {
+                    const touch = e.touches[0];
+                    handleDragStart(touch);
+                    e.preventDefault();
+                }
+            }, { passive: false });
+
+            function handleDragMove(e) {
+                if (elementDragging) {
+                    element.style.left = (e.clientX - elementOffset.x) + 'px';
+                    element.style.top = (e.clientY - elementOffset.y) + 'px';
+                    element.style.transform = 'translateX(-50%)'; // Maintain centering
+                }
+            }
+
+            document.addEventListener('mousemove', handleDragMove);
+            document.addEventListener('touchmove', (e) => {
+                if (elementDragging && e.touches.length === 1) {
+                    e.preventDefault();
+                    const touch = e.touches[0];
+                    handleDragMove(touch);
+                }
+            }, { passive: false });
+
+            function stopDragging() {
+                if (elementDragging) {
+                    elementDragging = false;
+                    element.style.cursor = 'pointer';
+                    element.style.zIndex = 'auto';
+                }
+            }
+
+            document.addEventListener('mouseup', stopDragging);
+            document.addEventListener('touchend', stopDragging);
+
+            element.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    createHeart3DParticle(window.innerWidth / 2, window.innerHeight / 2);
+                }
+            });
+        }
+
+        scene.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            previousMousePosition = { x: e.clientX, y: e.clientY };
+            scene.style.cursor = 'grabbing';
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (isDragging) {
+                const deltaX = e.clientX - previousMousePosition.x;
+                const deltaY = e.clientY - previousMousePosition.y;
+                rotation.y += deltaX * 0.3;
+                rotation.x -= deltaY * 0.3;
+                rotation.x = Math.max(-30, Math.min(30, rotation.x));
+                rotation.y = Math.max(-30, Math.min(30, rotation.y));
+                scene.style.transform = `rotateX(${rotation.x}deg) rotateY(${rotation.y}deg)`;
+                previousMousePosition = { x: e.clientX, y: e.clientY };
+            }
+        });
+
+        document.addEventListener('mouseup', () => {
+            isDragging = false;
+            scene.style.cursor = 'default';
+        });
+
+        function createHeart3DParticle(x, y) {
+            const heart = document.createElement('div');
+            heart.className = 'heart-particle';
+            heart.textContent = '💖';
+            heart.style.left = x + 'px';
+            heart.style.top = y + 'px';
+            scene.appendChild(heart);
+            setTimeout(() => heart.remove(), 3000);
+        }
+
+        function createFallingHeart3D() {
+            if (currentTextCount >= MAX_TEXT_ON_SCREEN) return;
+            const heart = document.createElement('div');
+            heart.className = 'heart-particle';
+            heart.textContent = '💖';
+            const depthClass = depthLevels[Math.floor(Math.random() * depthLevels.length)];
+            heart.classList.add(depthClass);
+            heart.style.left = Math.random() * (window.innerWidth - 40) + 20 + 'px';
+            heart.style.top = '-60px';
+            let duration = 4 + Math.random() * 2;
+            heart.style.animation = `heartFall3D ${duration}s linear forwards`;
+            heart.style.setProperty('--depth', depthClass === 'depth-near' ? '100px' : '0px');
+            scene.appendChild(heart);
+            currentTextCount++;
+            setTimeout(() => {
+                if (heart.parentNode) {
+                    heart.remove();
+                    currentTextCount--;
+                }
+            }, duration * 1000);
+        }
+
+        function createSparkles3D() {
+            const sparkleCount = window.innerWidth <= 768 ? 20 : 40;
+            for (let i = 0; i < sparkleCount; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle-3d';
+                sparkle.style.left = Math.random() * 100 + '%';
+                sparkle.style.top = Math.random() * 100 + '%';
+                sparkle.style.setProperty('--sparkle-depth', (Math.random() * 200 - 100) + 'px');
+                sparkle.style.animationDelay = Math.random() * 3 + 's';
+                sparkle.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                scene.appendChild(sparkle);
+            }
+        }
+
+        createSparkles3D();
+
+        const textInterval = window.innerWidth <= 768 ? 600 : 400;
+        setInterval(createFalling3DText, textInterval);
+
+        setInterval(() => {
+            if (Math.random() > 0.8) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle-3d';
+                sparkle.style.left = Math.random() * 100 + '%';
+                sparkle.style.top = Math.random() * 100 + '%';
+                sparkle.style.setProperty('--sparkle-depth', (Math.random() * 200 - 100) + 'px');
+                sparkle.style.animationDuration = '2s';
+                scene.appendChild(sparkle);
+                setTimeout(() => sparkle.remove(), 2000);
+            }
+        }, 600);
+
+        setInterval(() => {
+            if (Math.random() > 0.7) createFallingHeart3D();
+        }, 800);
+
+        let touchStartX, touchStartY, touchStartTime;
+        let isMultiTouch = false;
+
+        scene.addEventListener('touchstart', (e) => {
+            if (e.touches.length > 1) {
+                isMultiTouch = true;
+                return;
+            }
+            const touch = e.touches[0];
+            touchStartX = touch.clientX;
+            touchStartY = touch.clientY;
+            touchStartTime = Date.now();
+            isDragging = true;
+            previousMousePosition = { x: touchStartX, y: touchStartY };
+            e.preventDefault();
+        }, { passive: false });
+
+        scene.addEventListener('touchmove', (e) => {
+            if (isDragging && !isMultiTouch && e.touches.length === 1) {
+                const touch = e.touches[0];
+                const target = document.elementFromPoint(touch.clientX, touch.clientY);
+                if (target.closest('.scene') || target.classList.contains('text-item')) {
+                    e.preventDefault();
+                }
+                const deltaX = touch.clientX - previousMousePosition.x;
+                const deltaY = touch.clientY - previousMousePosition.y;
+                const sensitivity = window.innerWidth < 768 ? 0.2 : 0.3;
+                rotation.y += deltaX * sensitivity;
+                rotation.x -= deltaY * sensitivity;
+                rotation.x = Math.max(-30, Math.min(30, rotation.x));
+                rotation.y = Math.max(-30, Math.min(30, rotation.y));
+                scene.style.transform = `rotateX(${rotation.x}deg) rotateY(${rotation.y}deg)`;
+                previousMousePosition = { x: touch.clientX, y: touch.clientY };
+            }
+        }, { passive: false });
+
+        scene.addEventListener('touchend', (e) => {
+            isDragging = false;
+            isMultiTouch = false;
+            if (Date.now() - touchStartTime < 200) {
+                let momentum = 0.95;
+                const animate = () => {
+                    if (momentum > 0.01) {
+                        rotation.y += (previousMousePosition.x - touchStartX) * 0.01 * momentum;
+                        scene.style.transform = `rotateX(${rotation.x}deg) rotateY(${rotation.y}deg)`;
+                        momentum *= 0.95;
+                        requestAnimationFrame(animate);
+                    }
+                };
+                animate();
+            }
+        }, { passive: false });
+
+        scene.addEventListener('touchend', (e) => {
+            e.preventDefault();
+        }, { passive: false });
+
+        setInterval(() => {
+            if (!isDragging && Math.random() > 0.8) {
+                rotation.y += 0.3;
+                scene.style.transform = `rotateX(${rotation.x}deg) rotateY(${rotation.y}deg)`;
+            }
+        }, 4000);
+    </script>
+</body>
+</html>
