@@ -542,8 +542,30 @@
         let previousMousePosition = { x: 0, y: 0 };
         let rotation = { x: 0, y: 0 };
 
+        function createInitialTexts() {
+            // Tạo 10 phần tử ban đầu, mỗi phần tử cách nhau 1 giây
+            for (let i = 0; i < 10; i++) {
+                setTimeout(() => {
+                    const element = createFalling3DText();
+                    if (element) {
+                        // Thêm vị trí top ngẫu nhiên cho mỗi phần tử
+                        const randomTop = -200 - (Math.random() * 300); // Từ -200px đến -500px
+                        element.style.top = randomTop + 'px';
+                    }
+                    if (i % 2 === 0) { // Tạo trái tim xen kẽ
+                        const heart = createFallingHeart3D();
+                        if (heart) {
+                            // Thêm vị trí top ngẫu nhiên cho trái tim
+                            const randomTop = -200 - (Math.random() * 300);
+                            heart.style.top = randomTop + 'px';
+                        }
+                    }
+                }, i * 1000); // Tạo mỗi phần tử cách nhau 1 giây
+            }
+        }
+
         function createFalling3DText() {
-            if (currentTextCount >= MAX_TEXT_ON_SCREEN) return;
+            if (currentTextCount >= MAX_TEXT_ON_SCREEN) return null;
             const textData = texts[textIndex % texts.length];
             const element = document.createElement('div');
             const depthClass = depthLevels[Math.floor(Math.random() * depthLevels.length)];
@@ -570,7 +592,7 @@
             element.style.left = leftPos + 'px';
             element.style.top = '-100px';
 
-            let duration = 15;
+            let duration = 30;
             if (depthClass === 'depth-near') duration = 12;
             else if (depthClass === 'depth-mid') duration = 15;
 
@@ -579,6 +601,7 @@
             addDragFunctionality(element);
 
             textIndex++;
+            return element;
         }
 
         function addDragFunctionality(element) {
@@ -676,7 +699,7 @@
         }
 
         function createFallingHeart3D() {
-            if (currentTextCount >= MAX_TEXT_ON_SCREEN) return;
+            if (currentTextCount >= MAX_TEXT_ON_SCREEN) return null;
             const heart = document.createElement('div');
             heart.className = 'heart-particle';
             heart.textContent = '💖';
@@ -689,6 +712,7 @@
             heart.style.setProperty('--depth', depthClass === 'depth-near' ? '100px' : '0px');
             scene.appendChild(heart);
             currentTextCount++;
+            return heart;
         }
 
         function createSparkles3D() {
@@ -706,19 +730,6 @@
         }
 
         createSparkles3D();
-
-        // Tạo các phần tử ngay khi trang web được tải
-        function createInitialTexts() {
-            // Tạo 10 phần tử ban đầu, mỗi phần tử cách nhau 1 giây
-            for (let i = 0; i < 10; i++) {
-                setTimeout(() => {
-                    createFalling3DText();
-                    if (i % 2 === 0) { // Tạo trái tim xen kẽ
-                        createFallingHeart3D();
-                    }
-                }, i * 1000); // Tạo mỗi phần tử cách nhau 1 giây
-            }
-        }
 
         // Gọi hàm tạo phần tử ban đầu
         createInitialTexts();
