@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chữ rơi 3D có độ sâu</title>
+
     <style>
         * {
             margin: 0;
@@ -85,12 +86,15 @@
                 transform: translateX(-50%) translateY(-200px) translateZ(var(--depth)) rotateX(0deg) rotateZ(0deg);
                 opacity: 0;
             }
+
             10% {
                 opacity: 1;
             }
+
             90% {
                 opacity: 1;
             }
+
             100% {
                 transform: translateX(-50%) translateY(calc(100vh + 100px)) translateZ(var(--depth)) rotateX(10deg) rotateZ(var(--rotation));
                 opacity: 0;
@@ -102,12 +106,15 @@
                 transform: translateX(-50%) translateY(-200px) translateZ(var(--depth)) scale(1) rotateZ(0deg);
                 opacity: 0;
             }
+
             10% {
                 opacity: 1;
             }
+
             90% {
                 opacity: 1;
             }
+
             100% {
                 transform: translateX(-50%) translateY(calc(100vh + 100px)) translateZ(var(--depth)) scale(0.8) rotateZ(180deg);
                 opacity: 0;
@@ -143,10 +150,12 @@
                 transform: translateY(0) translateZ(0) scale(0) rotateZ(0deg);
                 opacity: 0;
             }
+
             20% {
                 opacity: 1;
                 transform: scale(1) rotateZ(45deg);
             }
+
             100% {
                 transform: translateY(-200px) translateZ(100px) scale(0.3) rotateZ(180deg);
                 opacity: 0;
@@ -164,13 +173,16 @@
         }
 
         @keyframes sparkle3D {
-            0%, 100% { 
-                opacity: 0; 
-                transform: translateZ(0px) scale(0) rotateX(0deg); 
+
+            0%,
+            100% {
+                opacity: 0;
+                transform: translateZ(0px) scale(0) rotateX(0deg);
             }
-            50% { 
-                opacity: 1; 
-                transform: translateZ(var(--sparkle-depth, 0px)) scale(1) rotateX(180deg); 
+
+            50% {
+                opacity: 1;
+                transform: translateZ(var(--sparkle-depth, 0px)) scale(1) rotateX(180deg);
             }
         }
 
@@ -178,7 +190,7 @@
             position: absolute;
             width: 120px;
             height: 120px;
-            background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, transparent 70%);
             border-radius: 50%;
             pointer-events: none;
             transform-style: preserve-3d;
@@ -186,17 +198,22 @@
         }
 
         @keyframes float3D {
-            0%, 100% { 
-                transform: translateX(0) translateY(0) translateZ(0px) rotateY(0deg); 
+
+            0%,
+            100% {
+                transform: translateX(0) translateY(0) translateZ(0px) rotateY(0deg);
             }
-            25% { 
-                transform: translateX(150px) translateY(-100px) translateZ(100px) rotateY(90deg); 
+
+            25% {
+                transform: translateX(150px) translateY(-100px) translateZ(100px) rotateY(90deg);
             }
-            50% { 
-                transform: translateX(-100px) translateY(150px) translateZ(-100px) rotateY(180deg); 
+
+            50% {
+                transform: translateX(-100px) translateY(150px) translateZ(-100px) rotateY(180deg);
             }
-            75% { 
-                transform: translateX(100px) translateY(100px) translateZ(50px) rotateY(270deg); 
+
+            75% {
+                transform: translateX(100px) translateY(100px) translateZ(50px) rotateY(270deg);
             }
         }
 
@@ -204,9 +221,9 @@
             position: absolute;
             width: 100%;
             height: 100%;
-            background-image: 
-                linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
             background-size: 50px 50px;
             transform: rotateX(90deg) translateZ(-300px);
             opacity: 0.3;
@@ -216,19 +233,24 @@
             body {
                 perspective: 1000px;
             }
+
             .scene {
                 transition: transform 0.2s ease-out;
             }
+
             .text-item {
                 padding: 7px 14px;
                 font-size: 15px;
             }
+
             .depth-near {
                 font-size: 18px;
             }
+
             .depth-mid {
                 font-size: 15px;
             }
+
             .glow-orb-3d {
                 width: 100px;
                 height: 100px;
@@ -240,6 +262,7 @@
                 perspective: 800px;
                 backdrop-filter: none;
             }
+
             .text-item {
                 padding: 6px 12px;
                 font-size: 14px;
@@ -248,18 +271,22 @@
                 background: rgba(255, 255, 255, 0.2);
                 transform: translateX(-50%) translateY(-200px) translateZ(var(--depth));
             }
+
             .depth-near {
                 --depth: 100px;
                 font-size: 16px;
             }
+
             .depth-mid {
                 --depth: 0px;
                 font-size: 14px;
             }
+
             .glow-orb-3d {
                 width: 80px;
                 height: 80px;
             }
+
             .instruction {
                 font-size: 12px;
                 padding: 8px;
@@ -275,21 +302,26 @@
             body {
                 perspective: 600px;
             }
+
             .text-item {
                 padding: 5px 10px;
                 font-size: 13px;
                 border-radius: 10px;
             }
+
             .depth-near {
                 font-size: 15px;
             }
+
             .depth-mid {
                 font-size: 13px;
             }
+
             .glow-orb-3d {
                 width: 60px;
                 height: 60px;
             }
+
             .heart-particle {
                 font-size: 14px;
             }
@@ -299,28 +331,35 @@
             body {
                 perspective: 500px;
             }
+
             .text-item {
                 padding: 4px 8px;
                 font-size: 12px;
                 border-radius: 8px;
             }
+
             .depth-near {
                 font-size: 14px;
             }
+
             .depth-mid {
                 font-size: 12px;
             }
+
             .glow-orb-3d {
                 width: 50px;
                 height: 50px;
             }
+
             .heart-particle {
                 font-size: 12px;
             }
+
             .sparkle-3d {
                 width: 2px;
                 height: 2px;
             }
+
             .instruction {
                 font-size: 11px;
                 padding: 6px;
@@ -334,24 +373,30 @@
             body {
                 perspective: 400px;
             }
+
             .text-item {
                 padding: 3px 6px;
                 font-size: 11px;
                 border-radius: 6px;
             }
+
             .depth-near {
                 font-size: 13px;
             }
+
             .depth-mid {
                 font-size: 11px;
             }
+
             .glow-orb-3d {
                 width: 40px;
                 height: 40px;
             }
+
             .heart-particle {
                 font-size: 10px;
             }
+
             .instruction {
                 font-size: 10px;
                 padding: 5px;
@@ -365,17 +410,19 @@
             .instruction {
                 display: none;
             }
+
             .text-item {
                 padding: 3px 6px;
                 font-size: 10px;
             }
         }
 
-        @media screen and (-webkit-min-device-pixel-ratio: 2), 
-               screen and (min-resolution: 192dpi) {
+        @media screen and (-webkit-min-device-pixel-ratio: 2),
+        screen and (min-resolution: 192dpi) {
             .text-item {
                 text-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
             }
+
             .sparkle-3d {
                 box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
             }
@@ -395,8 +442,8 @@
         }
     </style>
 </head>
+
 <body>
-    <div class="instruction">Chạm và kéo để xoay khung cảnh hoặc kéo chữ riêng lẻ</div>
     <div class="scene" id="scene">
         <div class="grid-3d"></div>
         <div class="glow-orb-3d" style="left: 10%; top: 20%;"></div>
@@ -407,12 +454,142 @@
     <script>
         const scene = document.getElementById('scene');
         const texts = [
-            { text: 'hữu nè', type: 'special' },
-            { text: 'hữu nè ❤️', type: 'love' },
-            { text: 'hữu nè ✨', type: 'date' }
+            
+                { text: 'Em là ánh sáng của anh 🌟', type: 'love' },
+                { text: 'Phạm Thị Yến Nhi 💖', type: 'special' },
+                { text: 'Trái tim anh thuộc về em ❤️', type: 'love' },
+                { text: 'Nụ cười em là tất cả ✨', type: 'date' },
+                { text: 'Yêu em mãi mãi 💞', type: 'love' },
+                { text: 'Phạm Thị Yến Nhi 🌹', type: 'special' },
+                { text: 'Mỗi ngày bên em là hạnh phúc 💫', type: 'love' },
+                { text: 'Nụ cười ngọt ngào 💐', type: 'special' },
+                { text: 'Anh và em mãi bên nhau ❤️', type: 'date' },
+                { text: 'I Love You Forever ❤️', type: 'love' },
+                { text: 'Em là giấc mơ của anh 🌙', type: 'love' },
+                { text: 'Phạm Thị Yến Nhi 💎', type: 'special' },
+                { text: 'Tình yêu của anh là em 💗', type: 'love' },
+                { text: 'Nụ cười em làm anh tan chảy 🌸', type: 'date' },
+                { text: 'Phạm Thị Yến Nhi ❤️✨', type: 'special' },
+                { text: 'Yêu em đến vạn năm 💕', type: 'love' },
+                { text: 'Em là ngôi sao sáng nhất 🌟', type: 'date' },
+                { text: 'Phạm Thị Yến Nhi 💝', type: 'special' },
+                { text: 'I Love You More Each Day ❤️', type: 'love' },
+                { text: 'Em là ánh sáng của anh 🌟', type: 'love' },
+                { text: 'Phạm Thị Yến Nhi 💖', type: 'special' },
+                { text: 'Trái tim anh thuộc về em ❤️', type: 'love' },
+                { text: 'Nụ cười em là tất cả ✨', type: 'date' },
+                { text: 'Yêu em mãi mãi 💞', type: 'love' },
+                { text: 'Phạm Thị Yến Nhi 🌹', type: 'special' },
+                { text: 'Mỗi ngày bên em là hạnh phúc 💫', type: 'love' },
+                { text: 'Nụ cười ngọt ngào 💐', type: 'special' },
+                { text: 'Anh và em mãi bên nhau ❤️', type: 'date' },
+                { text: 'I Love You Forever ❤️', type: 'love' },
+                { text: 'Em là giấc mơ của anh 🌙', type: 'love' },
+                { text: 'Phạm Thị Yến Nhi 💎', type: 'special' },
+                { text: 'Tình yêu của anh là em 💗', type: 'love' },
+                { text: 'Nụ cười em làm anh tan chảy 🌸', type: 'date' },
+                { text: 'Phạm Thị Yến Nhi ❤️✨', type: 'special' },
+                { text: 'Yêu em đến vạn năm 💕', type: 'love' },
+                { text: 'Em là ngôi sao sáng nhất 🌟', type: 'date' },
+                { text: 'Phạm Thị Yến Nhi 💝', type: 'special' },
+                { text: 'I Love You More Each Day ❤️', type: 'love' },
+                { text: 'Em là ánh sáng của anh 🌟', type: 'love' },
+                { text: 'Phạm Thị Yến Nhi 💖', type: 'special' },
+                { text: 'Trái tim anh thuộc về em ❤️', type: 'love' },
+                { text: 'Nụ cười em là tất cả ✨', type: 'date' },
+                { text: 'Yêu em mãi mãi 💞', type: 'love' },
+                { text: 'Phạm Thị Yến Nhi 🌹', type: 'special' },
+                { text: 'Mỗi ngày bên em là hạnh phúc 💫', type: 'love' },
+                { text: 'Nụ cười ngọt ngào 💐', type: 'special' },
+                { text: 'Anh và em mãi bên nhau ❤️', type: 'date' },
+                { text: 'I Love You Forever ❤️', type: 'love' },
+                { text: 'Em là giấc mơ của anh 🌙', type: 'love' },
+                { text: 'Phạm Thị Yến Nhi 💎', type: 'special' },
+                { text: 'Tình yêu của anh là em 💗', type: 'love' },
+                { text: 'Nụ cười em làm anh tan chảy 🌸', type: 'date' },
+                { text: 'Phạm Thị Yến Nhi ❤️✨', type: 'special' },
+                { text: 'Yêu em đến vạn năm 💕', type: 'love' },
+                { text: 'Em là ngôi sao sáng nhất 🌟', type: 'date' },
+                { text: 'Phạm Thị Yến Nhi 💝', type: 'special' },
+                { text: 'I Love You More Each Day ❤️', type: 'love' },
+                ,  { text: 'Em là ánh sáng của anh 🌟', type: 'love' },
+                { text: 'Phạm Thị Yến Nhi 💖', type: 'special' },
+                { text: 'Trái tim anh thuộc về em ❤️', type: 'love' },
+                { text: 'Nụ cười em là tất cả ✨', type: 'date' },
+                { text: 'Yêu em mãi mãi 💞', type: 'love' },
+                { text: 'Phạm Thị Yến Nhi 🌹', type: 'special' },
+                { text: 'Mỗi ngày bên em là hạnh phúc 💫', type: 'love' },
+                { text: 'Nụ cười ngọt ngào 💐', type: 'special' },
+                { text: 'Anh và em mãi bên nhau ❤️', type: 'date' },
+                { text: 'I Love You Forever ❤️', type: 'love' },
+                { text: 'Em là giấc mơ của anh 🌙', type: 'love' },
+                { text: 'Phạm Thị Yến Nhi 💎', type: 'special' },
+                { text: 'Tình yêu của anh là em 💗', type: 'love' },
+                { text: 'Nụ cười em làm anh tan chảy 🌸', type: 'date' },
+                { text: 'Phạm Thị Yến Nhi ❤️✨', type: 'special' },
+                { text: 'Yêu em đến vạn năm 💕', type: 'love' },
+                { text: 'Em là ngôi sao sáng nhất 🌟', type: 'date' },
+                { text: 'Phạm Thị Yến Nhi 💝', type: 'special' },
+                { text: 'I Love You More Each Day ❤️', type: 'love' },  { text: 'Em là ánh sáng của anh 🌟', type: 'love' },
+                { text: 'Phạm Thị Yến Nhi 💖', type: 'special' },
+                { text: 'Trái tim anh thuộc về em ❤️', type: 'love' },
+                { text: 'Nụ cười em là tất cả ✨', type: 'date' },
+                { text: 'Yêu em mãi mãi 💞', type: 'love' },
+                { text: 'Phạm Thị Yến Nhi 🌹', type: 'special' },
+                { text: 'Mỗi ngày bên em là hạnh phúc 💫', type: 'love' },
+                { text: 'Nụ cười ngọt ngào 💐', type: 'special' },
+                { text: 'Anh và em mãi bên nhau ❤️', type: 'date' },
+                { text: 'I Love You Forever ❤️', type: 'love' },
+                { text: 'Em là giấc mơ của anh 🌙', type: 'love' },
+                { text: 'Phạm Thị Yến Nhi 💎', type: 'special' },
+                { text: 'Tình yêu của anh là em 💗', type: 'love' },
+                { text: 'Nụ cười em làm anh tan chảy 🌸', type: 'date' },
+                { text: 'Phạm Thị Yến Nhi ❤️✨', type: 'special' },
+                { text: 'Yêu em đến vạn năm 💕', type: 'love' },
+                { text: 'Em là ngôi sao sáng nhất 🌟', type: 'date' },
+                { text: 'Phạm Thị Yến Nhi 💝', type: 'special' },
+                { text: 'I Love You More Each Day ❤️', type: 'love' }
+                ,  { text: 'Em là ánh sáng của anh 🌟', type: 'love' },
+                { text: 'Phạm Thị Yến Nhi 💖', type: 'special' },
+                { text: 'Trái tim anh thuộc về em ❤️', type: 'love' },
+                { text: 'Nụ cười em là tất cả ✨', type: 'date' },
+                { text: 'Yêu em mãi mãi 💞', type: 'love' },
+                { text: 'Phạm Thị Yến Nhi 🌹', type: 'special' },
+                { text: 'Mỗi ngày bên em là hạnh phúc 💫', type: 'love' },
+                { text: 'Nụ cười ngọt ngào 💐', type: 'special' },
+                { text: 'Anh và em mãi bên nhau ❤️', type: 'date' },
+                { text: 'I Love You Forever ❤️', type: 'love' },
+                { text: 'Em là giấc mơ của anh 🌙', type: 'love' },
+                { text: 'Phạm Thị Yến Nhi 💎', type: 'special' },
+                { text: 'Tình yêu của anh là em 💗', type: 'love' },
+                { text: 'Nụ cười em làm anh tan chảy 🌸', type: 'date' },
+                { text: 'Phạm Thị Yến Nhi ❤️✨', type: 'special' },
+                { text: 'Yêu em đến vạn năm 💕', type: 'love' },
+                { text: 'Em là ngôi sao sáng nhất 🌟', type: 'date' },
+                { text: 'Phạm Thị Yến Nhi 💝', type: 'special' },
+                { text: 'I Love You More Each Day ❤️', type: 'love' },  { text: 'Em là ánh sáng của anh 🌟', type: 'love' },
+                { text: 'Phạm Thị Yến Nhi 💖', type: 'special' },
+                { text: 'Trái tim anh thuộc về em ❤️', type: 'love' },
+                { text: 'Nụ cười em là tất cả ✨', type: 'date' },
+                { text: 'Yêu em mãi mãi 💞', type: 'love' },
+                { text: 'Phạm Thị Yến Nhi 🌹', type: 'special' },
+                { text: 'Mỗi ngày bên em là hạnh phúc 💫', type: 'love' },
+                { text: 'Nụ cười ngọt ngào 💐', type: 'special' },
+                { text: 'Anh và em mãi bên nhau ❤️', type: 'date' },
+                { text: 'I Love You Forever ❤️', type: 'love' },
+                { text: 'Em là giấc mơ của anh 🌙', type: 'love' },
+                { text: 'Phạm Thị Yến Nhi 💎', type: 'special' },
+                { text: 'Tình yêu của anh là em 💗', type: 'love' },
+                { text: 'Nụ cười em làm anh tan chảy 🌸', type: 'date' },
+                { text: 'Phạm Thị Yến Nhi ❤️✨', type: 'special' },
+                { text: 'Yêu em đến vạn năm 💕', type: 'love' },
+                { text: 'Em là ngôi sao sáng nhất 🌟', type: 'date' },
+                { text: 'Phạm Thị Yến Nhi 💝', type: 'special' },
+                { text: 'I Love You More Each Day ❤️', type: 'love' }
+            
         ];
 
-        const MAX_TEXT_ON_SCREEN =100;
+        const MAX_TEXT_ON_SCREEN = 200;
         let currentTextCount = 0;
         const occupiedPositions = [];
         const depthLevels = ['depth-near', 'depth-mid'];
@@ -685,4 +862,5 @@
         }, 4000);
     </script>
 </body>
+
 </html>

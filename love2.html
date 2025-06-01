@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tuyết Rơi</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: #000;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+
+        .snow {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: white;
+            border-radius: 50%;
+            filter: blur(1px);
+            animation: fall linear forwards;
+        }
+
+        .text {
+            position: fixed;
+            color: white;
+            font-size: 32px;
+            white-space: nowrap;
+            animation: floatText linear forwards;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.8),
+                         0 0 30px rgba(255, 255, 255, 0.4);
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .text.love {
+            color: #ff69b4;
+            text-shadow: 0 0 15px rgba(255, 105, 180, 0.8),
+                         0 0 30px rgba(255, 105, 180, 0.4);
+        }
+
+        .text.special {
+            color: #87ceeb;
+            text-shadow: 0 0 15px rgba(135, 206, 235, 0.8),
+                         0 0 30px rgba(135, 206, 235, 0.4);
+        }
+
+        .text.date {
+            color: #ffd700;
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.8),
+                         0 0 30px rgba(255, 215, 0, 0.4);
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh);
+            }
+        }
+
+        @keyframes floatText {
+            from {
+                transform: translateY(-100px) translateX(0);
+                opacity: 0;
+            }
+            5% {
+                opacity: 1;
+            }
+            95% {
+                opacity: 1;
+            }
+            to {
+                transform: translateY(100vh) translateX(var(--drift));
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <script>
+        const messages = [
+        { text: 'Em là ánh sáng của anh 🌟', type: 'love' },
+                { text: 'Phạm Thị Yến Nhi 💖', type: 'special' },
+                { text: 'Trái tim anh thuộc về em ❤️', type: 'love' },
+                { text: 'Nụ cười em là tất cả ✨', type: 'date' },
+                { text: 'Yêu em mãi mãi 💞', type: 'love' },
+                { text: 'Phạm Thị Yến Nhi 🌹', type: 'special' },
+                { text: 'Mỗi ngày bên em là hạnh phúc 💫', type: 'love' },
+                { text: 'Nụ cười ngọt ngào 💐', type: 'special' },
+                { text: 'Anh và em mãi bên nhau ❤️', type: 'date' },
+                { text: 'I Love You Forever ❤️', type: 'love' },
+                { text: 'Em là giấc mơ của anh 🌙', type: 'love' },
+                { text: 'Phạm Thị Yến Nhi 💎', type: 'special' },
+                { text: 'Tình yêu của anh là em 💗', type: 'love' },
+                { text: 'Nụ cười em làm anh tan chảy 🌸', type: 'date' },
+                { text: 'Phạm Thị Yến Nhi ❤️✨', type: 'special' },
+                { text: 'Yêu em đến vạn năm 💕', type: 'love' },
+                { text: 'Em là ngôi sao sáng nhất 🌟', type: 'date' },
+                { text: 'Phạm Thị Yến Nhi 💝', type: 'special' },
+                { text: 'I Love You More Each Day ❤️', type: 'love' },
+                { text: 'Em là ánh sáng của anh 🌟', type: 'love' },
+                { text: 'Phạm Thị Yến Nhi 💖', type: 'special' },
+                { text: 'Trái tim anh thuộc về em ❤️', type: 'love' },
+                { text: 'Nụ cười em là tất cả ✨', type: 'date' },
+                { text: 'Yêu em mãi mãi 💞', type: 'love' },
+                { text: 'Phạm Thị Yến Nhi 🌹', type: 'special' },
+                { text: 'Mỗi ngày bên em là hạnh phúc 💫', type: 'love' },
+                { text: 'Nụ cười ngọt ngào 💐', type: 'special' },
+                { text: 'Anh và em mãi bên nhau ❤️', type: 'date' },
+                { text: 'I Love You Forever ❤️', type: 'love' },
+                { text: 'Em là giấc mơ của anh 🌙', type: 'love' },
+                { text: 'Phạm Thị Yến Nhi 💎', type: 'special' },
+                { text: 'Tình yêu của anh là em 💗', type: 'love' },
+                { text: 'Nụ cười em làm anh tan chảy 🌸', type: 'date' },
+                { text: 'Phạm Thị Yến Nhi ❤️✨', type: 'special' },
+                { text: 'Yêu em đến vạn năm 💕', type: 'love' },
+                { text: 'Em là ngôi sao sáng nhất 🌟', type: 'date' },
+                { text: 'Phạm Thị Yến Nhi 💝', type: 'special' },
+                { text: 'I Love You More Each Day ❤️', type: 'love' },
+                { text: 'Em là ánh sáng của anh 🌟', type: 'love' },
+                { text: 'Phạm Thị Yến Nhi 💖', type: 'special' },
+                { text: 'Trái tim anh thuộc về em ❤️', type: 'love' },
+                { text: 'Nụ cười em là tất cả ✨', type: 'date' },
+                { text: 'Yêu em mãi mãi 💞', type: 'love' },
+                { text: 'Phạm Thị Yến Nhi 🌹', type: 'special' },
+                { text: 'Mỗi ngày bên em là hạnh phúc 💫', type: 'love' },
+                { text: 'Nụ cười ngọt ngào 💐', type: 'special' },
+                { text: 'Anh và em mãi bên nhau ❤️', type: 'date' },
+                { text: 'I Love You Forever ❤️', type: 'love' },
+                { text: 'Em là giấc mơ của anh 🌙', type: 'love' },
+                { text: 'Phạm Thị Yến Nhi 💎', type: 'special' },
+                { text: 'Tình yêu của anh là em 💗', type: 'love' },
+                { text: 'Nụ cười em làm anh tan chảy 🌸', type: 'date' },
+                { text: 'Phạm Thị Yến Nhi ❤️✨', type: 'special' },
+                { text: 'Yêu em đến vạn năm 💕', type: 'love' },
+                { text: 'Em là ngôi sao sáng nhất 🌟', type: 'date' },
+                { text: 'Phạm Thị Yến Nhi 💝', type: 'special' },
+                { text: 'I Love You More Each Day ❤️', type: 'love' },  { text: 'Em là ánh sáng của anh 🌟', type: 'love' },
+                { text: 'Phạm Thị Yến Nhi 💖', type: 'special' },
+                { text: 'Trái tim anh thuộc về em ❤️', type: 'love' },
+                { text: 'Nụ cười em là tất cả ✨', type: 'date' },
+                { text: 'Yêu em mãi mãi 💞', type: 'love' },
+                { text: 'Phạm Thị Yến Nhi 🌹', type: 'special' },
+                { text: 'Mỗi ngày bên em là hạnh phúc 💫', type: 'love' },
+                { text: 'Nụ cười ngọt ngào 💐', type: 'special' },
+                { text: 'Anh và em mãi bên nhau ❤️', type: 'date' },
+                { text: 'I Love You Forever ❤️', type: 'love' },
+                { text: 'Em là giấc mơ của anh 🌙', type: 'love' },
+                { text: 'Phạm Thị Yến Nhi 💎', type: 'special' },
+                { text: 'Tình yêu của anh là em 💗', type: 'love' },
+                { text: 'Nụ cười em làm anh tan chảy 🌸', type: 'date' },
+                { text: 'Phạm Thị Yến Nhi ❤️✨', type: 'special' },
+                { text: 'Yêu em đến vạn năm 💕', type: 'love' },
+                { text: 'Em là ngôi sao sáng nhất 🌟', type: 'date' },
+                { text: 'Phạm Thị Yến Nhi 💝', type: 'special' },
+                { text: 'I Love You More Each Day ❤️', type: 'love' }
+        ];
+
+        function createSnow() {
+            const snow = document.createElement('div');
+            snow.className = 'snow';
+            
+            // Random size
+            const size = Math.random() * 4 + 2;
+            snow.style.width = size + 'px';
+            snow.style.height = size + 'px';
+            
+            // Random position
+            snow.style.left = Math.random() * window.innerWidth + 'px';
+            
+            // Random opacity
+            snow.style.opacity = Math.random() * 0.6 + 0.4;
+            
+            // Random duration
+            const duration = Math.random() * 3 + 2;
+            snow.style.animationDuration = duration + 's';
+            
+            document.body.appendChild(snow);
+            
+            // Remove after animation
+            setTimeout(() => snow.remove(), duration * 1000);
+        }
+
+        function createText() {
+            const text = document.createElement('div');
+            const message = messages[Math.floor(Math.random() * messages.length)];
+            
+            text.className = `text ${message.type}`;
+            text.textContent = message.text;
+            
+            // Random position with better distribution
+            const margin = 100;
+            text.style.left = margin + Math.random() * (window.innerWidth - 2 * margin) + 'px';
+            
+            // Random drift with smoother movement
+            const drift = (Math.random() * 150 - 75) + 'px';
+            text.style.setProperty('--drift', drift);
+            
+            // Random duration with smoother fall
+            const duration = Math.random() * 3 + 10;
+            text.style.animationDuration = duration + 's';
+            
+            document.body.appendChild(text);
+            
+            // Remove after animation
+            setTimeout(() => text.remove(), duration * 1000);
+        }
+
+        // Create snow continuously
+        setInterval(createSnow, 50);
+
+        // Create text with better timing
+        setInterval(createText, 2500);
+
+        // Initial snow
+        for(let i = 0; i < 50; i++) {
+            createSnow();
+        }
+
+        // Initial text with better distribution
+        for(let i = 0; i < 8; i++) {
+            setTimeout(() => createText(), i * 300);
+        }
+    </script>
+</body>
+</html>
